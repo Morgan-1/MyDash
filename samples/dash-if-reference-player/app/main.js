@@ -104,7 +104,7 @@ app.controller('DashController', function($scope, sources, contributors) {
         }
     }
 
-    $scope.selectedItem = {url:"http://202.117.10.15/DASH/BigBuckBunny.mpd"};
+    $scope.selectedItem = {url:"http://localhost/DASH/BigBuckBunny.mpd"};
     $scope.abrEnabled = true;
     $scope.toggleCCBubble = false;
     $scope.debugEnabled = false;
