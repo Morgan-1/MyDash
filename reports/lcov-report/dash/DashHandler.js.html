@@ -1,0 +1,1674 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for dash\DashHandler.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">dash/</a> DashHandler.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">34.24% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>101/295</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">6.72% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>9/134</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25.93% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>7/27</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">34.6% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>100/289</span>
+      </div>
+      <div class='fl pad1y'>
+        <span class="strong">1 branch</span>
+        <span class="quiet">Ignored</span>  &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * The copyright in this software is being made available under the BSD License,
+ * included below. This software may be subject to other third party and contributor
+ * rights, including patent rights, and no such rights are granted under this license.
+ *
+ * Copyright (c) 2013, Dash Industry Forum.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *  * Redistributions of source code must retain the above copyright notice, this
+ *  list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright notice,
+ *  this list of conditions and the following disclaimer in the documentation and/or
+ *  other materials provided with the distribution.
+ *  * Neither the name of Dash Industry Forum nor the names of its
+ *  contributors may be used to endorse or promote products derived from this software
+ *  without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS AS IS AND ANY
+ *  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ *  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ *  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ *  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ *  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ *  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
+ */
+'use strict';
+&nbsp;
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+// istanbul ignore next
+&nbsp;
+function _interopRequireDefault(obj) { return obj &amp;&amp; obj.__esModule ? <span class="branch-0 cbranch-skip" title="branch not covered" >obj </span>: { 'default': obj }; }
+&nbsp;
+var _streamingVoFragmentRequest = require('../streaming/vo/FragmentRequest');
+&nbsp;
+var _streamingVoFragmentRequest2 = _interopRequireDefault(_streamingVoFragmentRequest);
+&nbsp;
+var _streamingVoError = require('../streaming/vo/Error');
+&nbsp;
+var _streamingVoError2 = _interopRequireDefault(_streamingVoError);
+&nbsp;
+var _streamingVoMetricsHTTPRequest = require('../streaming/vo/metrics/HTTPRequest');
+&nbsp;
+var _coreEventsEvents = require('../core/events/Events');
+&nbsp;
+var _coreEventsEvents2 = _interopRequireDefault(_coreEventsEvents);
+&nbsp;
+var _coreEventBus = require('../core/EventBus');
+&nbsp;
+var _coreEventBus2 = _interopRequireDefault(_coreEventBus);
+&nbsp;
+var _coreFactoryMaker = require('../core/FactoryMaker');
+&nbsp;
+var _coreFactoryMaker2 = _interopRequireDefault(_coreFactoryMaker);
+&nbsp;
+var _coreDebug = require('../core/Debug');
+&nbsp;
+var _coreDebug2 = _interopRequireDefault(_coreDebug);
+&nbsp;
+var _streamingUtilsURLUtils = require('../streaming/utils/URLUtils');
+&nbsp;
+var _streamingUtilsURLUtils2 = _interopRequireDefault(_streamingUtilsURLUtils);
+&nbsp;
+var _utilsSegmentsUtils = require('./utils/SegmentsUtils');
+&nbsp;
+var _utilsSegmentsGetter = require('./utils/SegmentsGetter');
+&nbsp;
+var _utilsSegmentsGetter2 = _interopRequireDefault(_utilsSegmentsGetter);
+&nbsp;
+var SEGMENTS_UNAVAILABLE_ERROR_CODE = 1;
+&nbsp;
+function DashHandler(config) {
+&nbsp;
+    var context = this.context;
+    var log = (0, _coreDebug2['default'])(context).getInstance().log;
+    var eventBus = (0, _coreEventBus2['default'])(context).getInstance();
+    var urlUtils = (0, _streamingUtilsURLUtils2['default'])(context).getInstance();
+&nbsp;
+    var segmentBaseLoader = config.segmentBaseLoader;
+    var timelineConverter = config.timelineConverter;
+    var dashMetrics = config.dashMetrics;
+    var metricsModel = config.metricsModel;
+    var baseURLController = config.baseURLController;
+&nbsp;
+    var instance = undefined,
+        index = undefined,
+        requestedTime = undefined,
+        isDynamic = undefined,
+        type = undefined,
+        currentTime = undefined,
+        earliestTime = undefined,
+        streamProcessor = undefined,
+        segmentsGetter = undefined;
+&nbsp;
+    function setup() {
+        index = -1;
+        currentTime = 0;
+        earliestTime = NaN;
+        eventBus.on(_coreEventsEvents2['default'].INITIALIZATION_LOADED, onInitializationLoaded, instance);
+        eventBus.on(_coreEventsEvents2['default'].SEGMENTS_LOADED, onSegmentsLoaded, instance);
+    }
+&nbsp;
+    function initialize(StreamProcessor) {
+        streamProcessor = StreamProcessor;
+        type = streamProcessor.getType();
+        isDynamic = streamProcessor.isDynamic();
+&nbsp;
+        segmentsGetter = (0, _utilsSegmentsGetter2['default'])(context).create(config, isDynamic);
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getStreamProcessor() {</span>
+<span class="cstat-no" title="statement not covered" >        return streamProcessor;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function setCurrentTime(value) {</span>
+<span class="cstat-no" title="statement not covered" >        currentTime = value;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getCurrentTime() {</span>
+<span class="cstat-no" title="statement not covered" >        return currentTime;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getCurrentIndex() {</span>
+<span class="cstat-no" title="statement not covered" >        return index;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getEarliestTime() {</span>
+<span class="cstat-no" title="statement not covered" >        return earliestTime;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function reset() {</span>
+<span class="cstat-no" title="statement not covered" >        segmentsGetter = null;</span>
+<span class="cstat-no" title="statement not covered" >        currentTime = 0;</span>
+<span class="cstat-no" title="statement not covered" >        earliestTime = NaN;</span>
+<span class="cstat-no" title="statement not covered" >        requestedTime = NaN;</span>
+<span class="cstat-no" title="statement not covered" >        index = -1;</span>
+<span class="cstat-no" title="statement not covered" >        isDynamic = null;</span>
+<span class="cstat-no" title="statement not covered" >        type = null;</span>
+<span class="cstat-no" title="statement not covered" >        streamProcessor = null;</span>
+<span class="cstat-no" title="statement not covered" >        eventBus.off(_coreEventsEvents2['default'].INITIALIZATION_LOADED, onInitializationLoaded, instance);</span>
+<span class="cstat-no" title="statement not covered" >        eventBus.off(_coreEventsEvents2['default'].SEGMENTS_LOADED, onSegmentsLoaded, instance);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function unescapeDollarsInTemplate(url) {</span>
+<span class="cstat-no" title="statement not covered" >        return url.split('$$').join('$');</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function replaceIDForTemplate(url, value) {</span>
+<span class="cstat-no" title="statement not covered" >        if (value === null || url.indexOf('$RepresentationID$') === -1) {</span>
+<span class="cstat-no" title="statement not covered" >            return url;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        var v = value.toString();</span>
+<span class="cstat-no" title="statement not covered" >        return url.split('$RepresentationID$').join(v);</span>
+    }
+&nbsp;
+    function setRequestUrl(request, destination, representation) {
+        var baseURL = baseURLController.resolve(representation.path);
+        var url;
+        var serviceLocation;
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (!baseURL || <span class="branch-1 cbranch-no" title="branch not covered" >destination === baseURL.url </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >!urlUtils.isRelative(destination))</span> {
+            url = destination;
+        } else {
+<span class="cstat-no" title="statement not covered" >            url = baseURL.url;</span>
+<span class="cstat-no" title="statement not covered" >            serviceLocation = baseURL.serviceLocation;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (destination) {</span>
+<span class="cstat-no" title="statement not covered" >                url = urlUtils.resolve(destination, url);</span>
+            }
+        }
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (urlUtils.isRelative(url)) {
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        }
+&nbsp;
+        request.url = url;
+        request.serviceLocation = serviceLocation;
+&nbsp;
+        return true;
+    }
+&nbsp;
+    function generateInitRequest(representation, mediaType) {
+        var request = new _streamingVoFragmentRequest2['default']();
+        var period, presentationStartTime;
+&nbsp;
+        period = representation.adaptation.period;
+&nbsp;
+        request.mediaType = mediaType;
+        request.type = _streamingVoMetricsHTTPRequest.HTTPRequest.INIT_SEGMENT_TYPE;
+        request.range = representation.range;
+        presentationStartTime = period.start;
+        request.availabilityStartTime = timelineConverter.calcAvailabilityStartTimeFromPresentationTime(presentationStartTime, representation.adaptation.period.mpd, isDynamic);
+        request.availabilityEndTime = timelineConverter.calcAvailabilityEndTimeFromPresentationTime(presentationStartTime + period.duration, period.mpd, isDynamic);
+        request.quality = representation.index;
+        request.mediaInfo = streamProcessor.getMediaInfo();
+&nbsp;
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (setRequestUrl(request, representation.initialization, representation)) {
+            return request;
+        }
+    }
+&nbsp;
+    function getInitRequest(representation) {
+        var request;
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!representation) <span class="cstat-no" title="statement not covered" >return null;</span>
+&nbsp;
+        request = generateInitRequest(representation, type);
+&nbsp;
+        //log("Got an initialization.");
+&nbsp;
+        return request;
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function isMediaFinished(representation) {</span>
+<span class="cstat-no" title="statement not covered" >        var period = representation.adaptation.period;</span>
+<span class="cstat-no" title="statement not covered" >        var segmentInfoType = representation.segmentInfoType;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var isFinished = false;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var sDuration, seg, fTime;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (index &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >            isFinished = false;</span>
+        } else <span class="cstat-no" title="statement not covered" >if (isDynamic || index &lt; representation.availableSegmentsNumber) {</span>
+<span class="cstat-no" title="statement not covered" >            seg = (0, _utilsSegmentsUtils.getSegmentByIndex)(index, representation);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (seg) {</span>
+<span class="cstat-no" title="statement not covered" >                fTime = seg.presentationStartTime - period.start;</span>
+<span class="cstat-no" title="statement not covered" >                sDuration = representation.adaptation.period.duration;</span>
+<span class="cstat-no" title="statement not covered" >                log(representation.segmentInfoType + ': ' + fTime + ' / ' + sDuration);</span>
+<span class="cstat-no" title="statement not covered" >                isFinished = segmentInfoType === 'SegmentTimeline' &amp;&amp; isDynamic ? false : fTime &gt;= sDuration;</span>
+            }
+        } else {
+<span class="cstat-no" title="statement not covered" >            isFinished = true;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return isFinished;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function updateSegments(representation) {</span>
+<span class="cstat-no" title="statement not covered" >        return segmentsGetter.getSegments(representation, requestedTime, index, onSegmentListUpdated);</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function onSegmentListUpdated(representation, segments) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        representation.segments = segments;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (segments &amp;&amp; segments.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >            earliestTime = isNaN(earliestTime) ? segments[0].presentationStartTime : Math.min(segments[0].presentationStartTime, earliestTime);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (isDynamic &amp;&amp; isNaN(timelineConverter.getExpectedLiveEdge())) {</span>
+<span class="cstat-no" title="statement not covered" >            var lastIdx = segments.length - 1;</span>
+<span class="cstat-no" title="statement not covered" >            var lastSegment = segments[lastIdx];</span>
+<span class="cstat-no" title="statement not covered" >            var liveEdge = lastSegment.presentationStartTime;</span>
+<span class="cstat-no" title="statement not covered" >            var metrics = metricsModel.getMetricsFor('stream');</span>
+            // the last segment is supposed to be a live edge
+<span class="cstat-no" title="statement not covered" >            timelineConverter.setExpectedLiveEdge(liveEdge);</span>
+<span class="cstat-no" title="statement not covered" >            metricsModel.updateManifestUpdateInfo(dashMetrics.getCurrentManifestUpdate(metrics), { presentationStartTime: liveEdge });</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function updateSegmentList(representation) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!representation) {</span>
+<span class="cstat-no" title="statement not covered" >            throw new _streamingVoError2['default']('no representation');</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        representation.segments = null;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        updateSegments(representation);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return representation;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function updateRepresentation(representation, keepIdx) {</span>
+<span class="cstat-no" title="statement not covered" >        var hasInitialization = representation.initialization;</span>
+<span class="cstat-no" title="statement not covered" >        var hasSegments = representation.segmentInfoType !== 'BaseURL' &amp;&amp; representation.segmentInfoType !== 'SegmentBase' &amp;&amp; !representation.indexRange;</span>
+<span class="cstat-no" title="statement not covered" >        var error;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!representation.segmentDuration &amp;&amp; !representation.segments) {</span>
+<span class="cstat-no" title="statement not covered" >            updateSegmentList(representation);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        representation.segmentAvailabilityRange = null;</span>
+<span class="cstat-no" title="statement not covered" >        representation.segmentAvailabilityRange = timelineConverter.calcSegmentAvailabilityRange(representation, isDynamic);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (representation.segmentAvailabilityRange.end &lt; representation.segmentAvailabilityRange.start &amp;&amp; !representation.useCalculatedLiveEdgeTime) {</span>
+<span class="cstat-no" title="statement not covered" >            error = new _streamingVoError2['default'](SEGMENTS_UNAVAILABLE_ERROR_CODE, 'no segments are available yet', { availabilityDelay: representation.segmentAvailabilityRange.start - representation.segmentAvailabilityRange.end });</span>
+<span class="cstat-no" title="statement not covered" >            eventBus.trigger(_coreEventsEvents2['default'].REPRESENTATION_UPDATED, { sender: this, representation: representation, error: error });</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!keepIdx) <span class="cstat-no" title="statement not covered" >index = -1;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (representation.segmentDuration) {</span>
+<span class="cstat-no" title="statement not covered" >            updateSegmentList(representation);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!hasInitialization) {</span>
+<span class="cstat-no" title="statement not covered" >            segmentBaseLoader.loadInitialization(representation);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!hasSegments) {</span>
+<span class="cstat-no" title="statement not covered" >            segmentBaseLoader.loadSegments(representation, type, representation.indexRange);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (hasInitialization &amp;&amp; hasSegments) {</span>
+<span class="cstat-no" title="statement not covered" >            eventBus.trigger(_coreEventsEvents2['default'].REPRESENTATION_UPDATED, { sender: this, representation: representation });</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getIndexForSegments(time, representation, timeThreshold) {</span>
+<span class="cstat-no" title="statement not covered" >        var segments = representation.segments;</span>
+<span class="cstat-no" title="statement not covered" >        var ln = segments ? segments.length : null;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var idx = -1;</span>
+<span class="cstat-no" title="statement not covered" >        var epsilon, frag, ft, fd, i;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (segments &amp;&amp; ln &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >            for (i = 0; i &lt; ln; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                frag = segments[i];</span>
+<span class="cstat-no" title="statement not covered" >                ft = frag.presentationStartTime;</span>
+<span class="cstat-no" title="statement not covered" >                fd = frag.duration;</span>
+<span class="cstat-no" title="statement not covered" >                epsilon = timeThreshold === undefined || timeThreshold === null ? fd / 2 : timeThreshold;</span>
+<span class="cstat-no" title="statement not covered" >                if (time + epsilon &gt;= ft &amp;&amp; time - epsilon &lt; ft + fd) {</span>
+<span class="cstat-no" title="statement not covered" >                    idx = frag.availabilityIdx;</span>
+<span class="cstat-no" title="statement not covered" >                    break;</span>
+                }
+            }
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return idx;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getRequestForSegment(segment) {</span>
+<span class="cstat-no" title="statement not covered" >        if (segment === null || segment === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            return null;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var request = new _streamingVoFragmentRequest2['default']();</span>
+<span class="cstat-no" title="statement not covered" >        var representation = segment.representation;</span>
+<span class="cstat-no" title="statement not covered" >        var bandwidth = representation.adaptation.period.mpd.manifest.Period_asArray[representation.adaptation.period.index].AdaptationSet_asArray[representation.adaptation.index].Representation_asArray[representation.index].bandwidth;</span>
+<span class="cstat-no" title="statement not covered" >        var url = segment.media;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        url = (0, _utilsSegmentsUtils.replaceTokenForTemplate)(url, 'Number', segment.replacementNumber);</span>
+<span class="cstat-no" title="statement not covered" >        url = (0, _utilsSegmentsUtils.replaceTokenForTemplate)(url, 'Time', segment.replacementTime);</span>
+<span class="cstat-no" title="statement not covered" >        url = (0, _utilsSegmentsUtils.replaceTokenForTemplate)(url, 'Bandwidth', bandwidth);</span>
+<span class="cstat-no" title="statement not covered" >        url = replaceIDForTemplate(url, representation.id);</span>
+<span class="cstat-no" title="statement not covered" >        url = unescapeDollarsInTemplate(url);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        request.mediaType = type;</span>
+<span class="cstat-no" title="statement not covered" >        request.type = _streamingVoMetricsHTTPRequest.HTTPRequest.MEDIA_SEGMENT_TYPE;</span>
+<span class="cstat-no" title="statement not covered" >        request.range = segment.mediaRange;</span>
+<span class="cstat-no" title="statement not covered" >        request.startTime = segment.presentationStartTime;</span>
+<span class="cstat-no" title="statement not covered" >        request.duration = segment.duration;</span>
+<span class="cstat-no" title="statement not covered" >        request.timescale = representation.timescale;</span>
+<span class="cstat-no" title="statement not covered" >        request.availabilityStartTime = segment.availabilityStartTime;</span>
+<span class="cstat-no" title="statement not covered" >        request.availabilityEndTime = segment.availabilityEndTime;</span>
+<span class="cstat-no" title="statement not covered" >        request.wallStartTime = segment.wallStartTime;</span>
+<span class="cstat-no" title="statement not covered" >        request.quality = representation.index;</span>
+<span class="cstat-no" title="statement not covered" >        request.index = segment.availabilityIdx;</span>
+<span class="cstat-no" title="statement not covered" >        request.mediaInfo = streamProcessor.getMediaInfo();</span>
+<span class="cstat-no" title="statement not covered" >        request.adaptationIndex = representation.adaptation.index;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (setRequestUrl(request, url, representation)) {</span>
+<span class="cstat-no" title="statement not covered" >            return request;</span>
+        }
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getSegmentRequestForTime(representation, time, options) {</span>
+<span class="cstat-no" title="statement not covered" >        var request, segment, finished;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var idx = index;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var keepIdx = options ? options.keepIdx : false;</span>
+<span class="cstat-no" title="statement not covered" >        var timeThreshold = options ? options.timeThreshold : null;</span>
+<span class="cstat-no" title="statement not covered" >        var ignoreIsFinished = options &amp;&amp; options.ignoreIsFinished ? true : false;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!representation) {</span>
+<span class="cstat-no" title="statement not covered" >            return null;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (requestedTime !== time) {</span>
+            // When playing at live edge with 0 delay we may loop back with same time and index until it is available. Reduces verboseness of logs.
+<span class="cstat-no" title="statement not covered" >            requestedTime = time;</span>
+<span class="cstat-no" title="statement not covered" >            log('Getting the request for ' + type + ' time : ' + time);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        index = getIndexForSegments(time, representation, timeThreshold);</span>
+        //Index may be -1 if getSegments needs to update.  So after getSegments is called and updated then try to get index again.
+<span class="cstat-no" title="statement not covered" >        updateSegments(representation);</span>
+<span class="cstat-no" title="statement not covered" >        if (index &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >            index = getIndexForSegments(time, representation, timeThreshold);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (index &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >            log('Index for ' + type + ' time ' + time + ' is ' + index);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        finished = !ignoreIsFinished ? isMediaFinished(representation) : false;</span>
+<span class="cstat-no" title="statement not covered" >        if (finished) {</span>
+<span class="cstat-no" title="statement not covered" >            request = new _streamingVoFragmentRequest2['default']();</span>
+<span class="cstat-no" title="statement not covered" >            request.action = _streamingVoFragmentRequest2['default'].ACTION_COMPLETE;</span>
+<span class="cstat-no" title="statement not covered" >            request.index = index;</span>
+<span class="cstat-no" title="statement not covered" >            request.mediaType = type;</span>
+<span class="cstat-no" title="statement not covered" >            request.mediaInfo = streamProcessor.getMediaInfo();</span>
+<span class="cstat-no" title="statement not covered" >            log('Signal complete.', request);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            segment = (0, _utilsSegmentsUtils.getSegmentByIndex)(index, representation);</span>
+<span class="cstat-no" title="statement not covered" >            request = getRequestForSegment(segment);</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (keepIdx &amp;&amp; idx &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >            index = representation.segmentInfoType === 'SegmentTimeline' &amp;&amp; isDynamic ? index : idx;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return request;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function generateSegmentRequestForTime(representation, time) {</span>
+<span class="cstat-no" title="statement not covered" >        var step = (representation.segmentAvailabilityRange.end - representation.segmentAvailabilityRange.start) / 2;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        representation.segments = null;</span>
+<span class="cstat-no" title="statement not covered" >        representation.segmentAvailabilityRange = { start: time - step, end: time + step };</span>
+<span class="cstat-no" title="statement not covered" >        return getSegmentRequestForTime(representation, time, { keepIdx: false, ignoreIsFinished: true });</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function getNextSegmentRequest(representation) {</span>
+<span class="cstat-no" title="statement not covered" >        var request, segment, finished;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!representation || index === -1) {</span>
+<span class="cstat-no" title="statement not covered" >            return null;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        requestedTime = null;</span>
+<span class="cstat-no" title="statement not covered" >        index++;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        log('Getting the next request at index: ' + index);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        finished = isMediaFinished(representation);</span>
+<span class="cstat-no" title="statement not covered" >        if (finished) {</span>
+<span class="cstat-no" title="statement not covered" >            request = new _streamingVoFragmentRequest2['default']();</span>
+<span class="cstat-no" title="statement not covered" >            request.action = _streamingVoFragmentRequest2['default'].ACTION_COMPLETE;</span>
+<span class="cstat-no" title="statement not covered" >            request.index = index;</span>
+<span class="cstat-no" title="statement not covered" >            request.mediaType = type;</span>
+<span class="cstat-no" title="statement not covered" >            request.mediaInfo = streamProcessor.getMediaInfo();</span>
+<span class="cstat-no" title="statement not covered" >            log('Signal complete.');</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            updateSegments(representation);</span>
+<span class="cstat-no" title="statement not covered" >            segment = (0, _utilsSegmentsUtils.getSegmentByIndex)(index, representation);</span>
+<span class="cstat-no" title="statement not covered" >            request = getRequestForSegment(segment);</span>
+<span class="cstat-no" title="statement not covered" >            if (!segment &amp;&amp; isDynamic) {</span>
+                /*
+                 Sometimes when playing dynamic streams with 0 fragment delay at live edge we ask for
+                 an index before it is available so we decrement index back and send null request
+                 which triggers the validate loop to rerun and the next time the segment should be
+                 available.
+                 */
+<span class="cstat-no" title="statement not covered" >                index--;</span>
+            }
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return request;</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function onInitializationLoaded(e) {</span>
+<span class="cstat-no" title="statement not covered" >        var representation = e.representation;</span>
+        //log("Got an initialization.");
+<span class="cstat-no" title="statement not covered" >        if (!representation.segments) <span class="cstat-no" title="statement not covered" >return;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        eventBus.trigger(_coreEventsEvents2['default'].REPRESENTATION_UPDATED, { sender: this, representation: representation });</span>
+    }
+&nbsp;
+<span class="fstat-no" title="function not covered" >    function onSegmentsLoaded(e) {</span>
+<span class="cstat-no" title="statement not covered" >        if (e.error || type !== e.mediaType) <span class="cstat-no" title="statement not covered" >return;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var fragments = e.segments;</span>
+<span class="cstat-no" title="statement not covered" >        var representation = e.representation;</span>
+<span class="cstat-no" title="statement not covered" >        var segments = [];</span>
+<span class="cstat-no" title="statement not covered" >        var count = 0;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var i, len, s, seg;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        for (i = 0, len = fragments.length; i &lt; len; i++) {</span>
+<span class="cstat-no" title="statement not covered" >            s = fragments[i];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            seg = (0, _utilsSegmentsUtils.getTimeBasedSegment)(timelineConverter, isDynamic, representation, s.startTime, s.duration, s.timescale, s.media, s.mediaRange, count);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            segments.push(seg);</span>
+<span class="cstat-no" title="statement not covered" >            seg = null;</span>
+<span class="cstat-no" title="statement not covered" >            count++;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        representation.segmentAvailabilityRange = { start: segments[0].presentationStartTime, end: segments[len - 1].presentationStartTime };</span>
+<span class="cstat-no" title="statement not covered" >        representation.availableSegmentsNumber = len;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        onSegmentListUpdated(representation, segments);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!representation.initialization) <span class="cstat-no" title="statement not covered" >return;</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        eventBus.trigger(_coreEventsEvents2['default'].REPRESENTATION_UPDATED, { sender: this, representation: representation });</span>
+    }
+&nbsp;
+    instance = {
+        initialize: initialize,
+        getStreamProcessor: getStreamProcessor,
+        getInitRequest: getInitRequest,
+        getSegmentRequestForTime: getSegmentRequestForTime,
+        getNextSegmentRequest: getNextSegmentRequest,
+        generateSegmentRequestForTime: generateSegmentRequestForTime,
+        updateRepresentation: updateRepresentation,
+        setCurrentTime: setCurrentTime,
+        getCurrentTime: getCurrentTime,
+        getCurrentIndex: getCurrentIndex,
+        getEarliestTime: getEarliestTime,
+        reset: reset
+    };
+&nbsp;
+    setup();
+&nbsp;
+    return instance;
+}
+&nbsp;
+DashHandler.__dashjs_factory_name = 'DashHandler';
+var factory = _coreFactoryMaker2['default'].getClassFactory(DashHandler);
+factory.SEGMENTS_UNAVAILABLE_ERROR_CODE = SEGMENTS_UNAVAILABLE_ERROR_CODE;
+exports['default'] = factory;
+module.exports = exports['default'];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkM6L0FwYWNoZTI0L2h0ZG9jcy9NeURhc2gvc3JjL2Rhc2gvRGFzaEhhbmRsZXIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OzBDQThCNEIsaUNBQWlDOzs7O2dDQUMzQyx1QkFBdUI7Ozs7NkNBQ2YscUNBQXFDOztnQ0FDNUMsdUJBQXVCOzs7OzRCQUNyQixrQkFBa0I7Ozs7Z0NBQ2Qsc0JBQXNCOzs7O3lCQUM3QixlQUFlOzs7O3NDQUNaLDZCQUE2Qjs7OztrQ0FFNEIsdUJBQXVCOzttQ0FDMUUsd0JBQXdCOzs7O0FBRW5ELElBQU0sK0JBQStCLEdBQUcsQ0FBQyxDQUFDOztBQUUxQyxTQUFTLFdBQVcsQ0FBQyxNQUFNLEVBQUU7O0FBRXpCLFFBQUksT0FBTyxHQUFHLElBQUksQ0FBQyxPQUFPLENBQUM7QUFDM0IsUUFBSSxHQUFHLEdBQUcsNEJBQU0sT0FBTyxDQUFDLENBQUMsV0FBVyxFQUFFLENBQUMsR0FBRyxDQUFDO0FBQzNDLFFBQUksUUFBUSxHQUFHLCtCQUFTLE9BQU8sQ0FBQyxDQUFDLFdBQVcsRUFBRSxDQUFDO0FBQy9DLFFBQU0sUUFBUSxHQUFHLHlDQUFTLE9BQU8sQ0FBQyxDQUFDLFdBQVcsRUFBRSxDQUFDOztBQUVqRCxRQUFJLGlCQUFpQixHQUFHLE1BQU0sQ0FBQyxpQkFBaUIsQ0FBQztBQUNqRCxRQUFJLGlCQUFpQixHQUFHLE1BQU0sQ0FBQyxpQkFBaUIsQ0FBQztBQUNqRCxRQUFJLFdBQVcsR0FBRyxNQUFNLENBQUMsV0FBVyxDQUFDO0FBQ3JDLFFBQUksWUFBWSxHQUFHLE1BQU0sQ0FBQyxZQUFZLENBQUM7QUFDdkMsUUFBTSxpQkFBaUIsR0FBRyxNQUFNLENBQUMsaUJBQWlCLENBQUM7O0FBRW5ELFFBQUksUUFBUSxZQUFBO1FBQ1IsS0FBSyxZQUFBO1FBQ0wsYUFBYSxZQUFBO1FBQ2IsU0FBUyxZQUFBO1FBQ1QsSUFBSSxZQUFBO1FBQ0osV0FBVyxZ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QUM7Q0FDbkI7O0FBRUQsV0FBVyxDQUFDLHFCQUFxQixHQUFHLGFBQWEsQ0FBQztBQUNsRCxJQUFJLE9BQU8sR0FBRyw4QkFBYSxlQUFlLENBQUMsV0FBVyxDQUFDLENBQUM7QUFDeEQsT0FBTyxDQUFDLCtCQUErQixHQUFHLCtCQUErQixDQUFDO3FCQUMzRCxPQUFPIiwiZmlsZSI6IkM6L0FwYWNoZTI0L2h0ZG9jcy9NeURhc2gvc3JjL2Rhc2gvRGFzaEhhbmRsZXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIFRoZSBjb3B5cmlnaHQgaW4gdGhpcyBzb2Z0d2FyZSBpcyBiZWluZyBtYWRlIGF2YWlsYWJsZSB1bmRlciB0aGUgQlNEIExpY2Vuc2UsXG4gKiBpbmNsdWRlZCBiZWxvdy4gVGhpcyBzb2Z0d2FyZSBtYXkgYmUgc3ViamVjdCB0byBvdGhlciB0aGlyZCBwYXJ0eSBhbmQgY29udHJpYnV0b3JcbiAqIHJpZ2h0cywgaW5jbHVkaW5nIHBhdGVudCByaWdodHMsIGFuZCBubyBzdWNoIHJpZ2h0cyBhcmUgZ3JhbnRlZCB1bmRlciB0aGlzIGxpY2Vuc2UuXG4gKlxuICogQ29weXJpZ2h0IChjKSAyMDEzLCBEYXNoIEluZHVzdHJ5IEZvcnVtLlxuICogQWxsIHJpZ2h0cyByZXNlcnZlZC5cbiAqXG4gKiBSZWRpc3RyaWJ1dGlvbiBhbmQgdXNlIGluIHNvdXJjZSBhbmQgYmluYXJ5IGZvcm1zLCB3aXRoIG9yIHdpdGhvdXQgbW9kaWZpY2F0aW9uLFxuICogYXJlIHBlcm1pdHRlZCBwcm92aWRlZCB0aGF0IHRoZSBmb2xsb3dpbmcgY29uZGl0aW9ucyBhcmUgbWV0OlxuICogICogUmVkaXN0cmlidXRpb25zIG9mIHNvdXJjZSBjb2RlIG11c3QgcmV0YWluIHRoZSBhYm92ZSBjb3B5cmlnaHQgbm90aWNlLCB0aGlzXG4gKiAgbGlzdCBvZiBjb25kaXRpb25zIGFuZCB0aGUgZm9sbG93aW5nIGRpc2NsYWltZXIuXG4gKiAgKiBSZWRpc3RyaWJ1dGlvbnMgaW4gYmluYXJ5IGZvcm0gbXVzdCByZXByb2R1Y2UgdGhlIGFib3ZlIGNvcHlyaWdodCBub3RpY2UsXG4gKiAgdGhpcyBsaXN0IG9mIGNvbmRpdGlvbnMgYW5kIHRoZSBmb2xsb3dpbmcgZGlzY2xhaW1lciBpbiB0aGUgZG9jdW1lbnRhdGlvbiBhbmQvb3JcbiAqICBvdGhlciBtYXRlcmlhbHMgcHJvdmlkZWQgd2l0aCB0aGUgZGlzdHJpYnV0aW9uLlxuICogICogTmVpdGhlciB0aGUgbmFtZSBvZiBEYXNoIEluZHVzdHJ5IEZvcnVtIG5vciB0aGUgbmFtZXMgb2YgaXRzXG4gKiAgY29udHJpYnV0b3JzIG1heSBiZSB1c2VkIHRvIGVuZG9yc2Ugb3IgcHJvbW90ZSBwcm9kdWN0cyBkZXJpdmVkIGZyb20gdGhpcyBzb2Z0d2FyZVxuICogIHdpdGhvdXQgc3BlY2lmaWMgcHJpb3Igd3JpdHRlbiBwZXJtaXNzaW9uLlxuICpcbiAqICBUSElTIFNPRlRXQVJFIElTIFBST1ZJREVEIEJZIFRIRSBDT1BZUklHSFQgSE9MREVSUyBBTkQgQ09OVFJJQlVUT1JTIEFTIElTIEFORCBBTllcbiAqICBFWFBSRVNTIE9SIElNUExJRUQgV0FSUkFOVElFUywgSU5DTFVESU5HLCBCVVQgTk9UIExJTUlURUQgVE8sIFRIRSBJTVBMSUVEXG4gKiAgV0FSUkFOVElFUyBPRiBNRVJDSEFOVEFCSUxJVFkgQU5EIEZJVE5FU1MgRk9SIEEgUEFSVElDVUxBUiBQVVJQT1NFIEFSRSBESVNDTEFJTUVELlxuICogIElOIE5PIEVWRU5UIFNIQUxMIFRIRSBDT1BZUklHSFQgSE9MREVSIE9SIENPTlRSSUJVVE9SUyBCRSBMSUFCTEUgRk9SIEFOWSBESVJFQ1QsXG4gKiAgSU5ESVJFQ1QsIElOQ0lERU5UQUwsIFNQRUNJQUwsIEVYRU1QTEFSWSwgT1IgQ09OU0VRVUVOVElBTCBEQU1BR0VTIChJTkNMVURJTkcsIEJVVFxuICogIE5PVCBMSU1JVEVEIFRPLCBQUk9DVVJFTUVOVCBPRiBTVUJTVElUVVRFIEdPT0RTIE9SIFNFUlZJQ0VTOyBMT1NTIE9GIFVTRSwgREFUQSwgT1JcbiAqICBQUk9GSVRTOyBPUiBCVVNJTkVTUyBJTlRFUlJVUFRJT04pIEhPV0VWRVIgQ0FVU0VEIEFORCBPTiBBTlkgVEhFT1JZIE9GIExJQUJJTElUWSxcbiAqICBXSEVUSEVSIElOIENPTlRSQUNULCBTVFJJQ1QgTElBQklMSVRZLCBPUiBUT1JUIChJTkNMVURJTkcgTkVHTElHRU5DRSBPUiBPVEhFUldJU0UpXG4gKiAgQVJJU0lORyBJTiBBTlkgV0FZIE9VVCBPRiBUSEUgVVNFIE9GIFRISVMgU09GVFdBUkUsIEVWRU4gSUYgQURWSVNFRCBPRiBUSEVcbiAqICBQT1NTSUJJTElUWSBPRiBTVUNIIERBTUFHRS5cbiAqL1xuaW1wb3J0IEZyYWdtZW50UmVxdWVzdCBmcm9tICcuLi9zdHJlYW1pbmcvdm8vRnJhZ21lbnRSZXF1ZXN0JztcbmltcG9ydCBFcnJvciBmcm9tICcuLi9zdHJlYW1pbmcvdm8vRXJyb3InO1xuaW1wb3J0IHtIVFRQUmVxdWVzdH0gZnJvbSAnLi4vc3RyZWFtaW5nL3ZvL21ldHJpY3MvSFRUUFJlcXVlc3QnO1xuaW1wb3J0IEV2ZW50cyBmcm9tICcuLi9jb3JlL2V2ZW50cy9FdmVudHMnO1xuaW1wb3J0IEV2ZW50QnVzIGZyb20gJy4uL2NvcmUvRXZlbnRCdXMnO1xuaW1wb3J0IEZhY3RvcnlNYWtlciBmcm9tICcuLi9jb3JlL0ZhY3RvcnlNYWtlcic7XG5pbXBvcnQgRGVidWcgZnJvbSAnLi4vY29yZS9EZWJ1Zyc7XG5pbXBvcnQgVVJMVXRpbHMgZnJvbSAnLi4vc3RyZWFtaW5nL3V0aWxzL1VSTFV0aWxzJztcblxuaW1wb3J0IHtyZXBsYWNlVG9rZW5Gb3JUZW1wbGF0ZSwgZ2V0VGltZUJhc2VkU2VnbWVudCwgZ2V0U2VnbWVudEJ5SW5kZXh9IGZyb20gJy4vdXRpbHMvU2VnbWVudHNVdGlscyc7XG5pbXBvcnQgU2VnbWVudHNHZXR0ZXIgZnJvbSAnLi91dGlscy9TZWdtZW50c0dldHRlcic7XG5cbmNvbnN0IFNFR01FTlRTX1VOQVZBSUxBQkxFX0VSUk9SX0NPREUgPSAxO1xuXG5mdW5jdGlvbiBEYXNoSGFuZGxlcihjb25maWcpIHtcblxuICAgIGxldCBjb250ZXh0ID0gdGhpcy5jb250ZXh0O1xuICAgIGxldCBsb2cgPSBEZWJ1Zyhjb250ZXh0KS5nZXRJbnN0YW5jZSgpLmxvZztcbiAgICBsZXQgZXZlbnRCdXMgPSBFdmVudEJ1cyhjb250ZXh0KS5nZXRJbnN0YW5jZSgpO1xuICAgIGNvbnN0IHVybFV0aWxzID0gVVJMVXRpbHMoY29udGV4dCkuZ2V0SW5zdGFuY2UoKTtcblxuICAgIGxldCBzZWdtZW50QmFzZUxvYWRlciA9IGNvbmZpZy5zZWdtZW50QmFzZUxvYWRlcjtcbiAgICBsZXQgdGltZWxpbmVDb252ZXJ0ZXIgPSBjb25maWcudGltZWxpbmVDb252ZXJ0ZXI7XG4gICAgbGV0IGRhc2hNZXRyaWNzID0gY29uZmlnLmRhc2hNZXRyaWNzO1xuICAgIGxldCBtZXRyaWNzTW9kZWwgPSBjb25maWcubWV0cmljc01vZGVsO1xuICAgIGNvbnN0IGJhc2VVUkxDb250cm9sbGVyID0gY29uZmlnLmJhc2VVUkxDb250cm9sbGVyO1xuXG4gICAgbGV0IGluc3RhbmNlLFxuICAgICAgICBpbmRleCxcbiAgICAgICAgcmVxdWVzdGVkVGltZSxcbiAgICAgICAgaXNEeW5hbWljLFxuICAgICAgICB0eXBlLFxuICAgICAgICBjdXJyZW50VGltZSxcbiAgICAgICAgZWFybGllc3RUaW1lLFxuICAgICAgICBzdHJlYW1Qcm9jZXNzb3IsXG4gICAgICAgIHNlZ21lbnRzR2V0dGVyO1xuXG4gICAgZnVuY3Rpb24gc2V0dXAoKSB7XG4gICAgICAgIGluZGV4ID0gLTE7XG4gICAgICAgIGN1cnJlbnRUaW1lID0gMDtcbiAgICAgICAgZWFybGllc3RUaW1lID0gTmFOO1xuICAgICAgICBldmVudEJ1cy5vbihFdmVudHMuSU5JVElBTElaQVRJT05fTE9BREVELCBvbkluaXRpYWxpemF0aW9uTG9hZGVkLCBpbnN0YW5jZSk7XG4gICAgICAgIGV2ZW50QnVzLm9uKEV2ZW50cy5TRUdNRU5UU19MT0FERUQsIG9uU2VnbWVudHNMb2FkZWQsIGluc3RhbmNlKTtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBpbml0aWFsaXplKFN0cmVhbVByb2Nlc3Nvcikge1xuICAgICAgICBzdHJlYW1Qcm9jZXNzb3IgPSBTdHJlYW1Qcm9jZXNzb3I7XG4gICAgICAgIHR5cGUgPSBzdHJlYW1Qcm9jZXNzb3IuZ2V0VHlwZSgpO1xuICAgICAgICBpc0R5bmFtaWMgPSBzdHJlYW1Qcm9jZXNzb3IuaXNEeW5hbWljKCk7XG5cbiAgICAgICAgc2VnbWVudHNHZXR0ZXIgPSBTZWdtZW50c0dldHRlcihjb250ZXh0KS5jcmVhdGUoY29uZmlnLCBpc0R5bmFtaWMpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIGdldFN0cmVhbVByb2Nlc3NvcigpIHtcbiAgICAgICAgcmV0dXJuIHN0cmVhbVByb2Nlc3NvcjtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBzZXRDdXJyZW50VGltZSh2YWx1ZSkge1xuICAgICAgICBjdXJyZW50VGltZSA9IHZhbHVlO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIGdldEN1cnJlbnRUaW1lKCkge1xuICAgICAgICByZXR1cm4gY3VycmVudFRpbWU7XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gZ2V0Q3VycmVudEluZGV4KCkge1xuICAgICAgICByZXR1cm4gaW5kZXg7XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gZ2V0RWFybGllc3RUaW1lKCkge1xuICAgICAgICByZXR1cm4gZWFybGllc3RUaW1lO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHJlc2V0KCkge1xuICAgICAgICBzZWdtZW50c0dldHRlciA9IG51bGw7XG4gICAgICAgIGN1cnJlbnRUaW1lID0gMDtcbiAgICAgICAgZWFybGllc3RUaW1lID0gTmFOO1xuICAgICAgICByZXF1ZXN0ZWRUaW1lID0gTmFOO1xuICAgICAgICBpbmRleCA9IC0xO1xuICAgICAgICBpc0R5bmFtaWMgPSBudWxsO1xuICAgICAgICB0eXBlID0gbnVsbDtcbiAgICAgICAgc3RyZWFtUHJvY2Vzc29yID0gbnVsbDtcbiAgICAgICAgZXZlbnRCdXMub2ZmKEV2ZW50cy5JTklUSUFMSVpBVElPTl9MT0FERUQsIG9uSW5pdGlhbGl6YXRpb25Mb2FkZWQsIGluc3RhbmNlKTtcbiAgICAgICAgZXZlbnRCdXMub2ZmKEV2ZW50cy5TRUdNRU5UU19MT0FERUQsIG9uU2VnbWVudHNMb2FkZWQsIGluc3RhbmNlKTtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiB1bmVzY2FwZURvbGxhcnNJblRlbXBsYXRlKHVybCkge1xuICAgICAgICByZXR1cm4gdXJsLnNwbGl0KCckJCcpLmpvaW4oJyQnKTtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiByZXBsYWNlSURGb3JUZW1wbGF0ZSh1cmwsIHZhbHVlKSB7XG4gICAgICAgIGlmICh2YWx1ZSA9PT0gbnVsbCB8fCB1cmwuaW5kZXhPZignJFJlcHJlc2VudGF0aW9uSUQkJykgPT09IC0xKSB7IHJldHVybiB1cmw7IH1cbiAgICAgICAgdmFyIHYgPSB2YWx1ZS50b1N0cmluZygpO1xuICAgICAgICByZXR1cm4gdXJsLnNwbGl0KCckUmVwcmVzZW50YXRpb25JRCQnKS5qb2luKHYpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIHNldFJlcXVlc3RVcmwocmVxdWVzdCwgZGVzdGluYXRpb24sIHJlcHJlc2VudGF0aW9uKSB7XG4gICAgICAgIHZhciBiYXNlVVJMID0gYmFzZVVSTENvbnRyb2xsZXIucmVzb2x2ZShyZXByZXNlbnRhdGlvbi5wYXRoKTtcbiAgICAgICAgdmFyIHVybDtcbiAgICAgICAgdmFyIHNlcnZpY2VMb2NhdGlvbjtcblxuICAgICAgICBpZiAoIWJhc2VVUkwgfHwgKGRlc3RpbmF0aW9uID09PSBiYXNlVVJMLnVybCkgfHwgKCF1cmxVdGlscy5pc1JlbGF0aXZlKGRlc3RpbmF0aW9uKSkpIHtcbiAgICAgICAgICAgIHVybCA9IGRlc3RpbmF0aW9uO1xuICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgdXJsID0gYmFzZVVSTC51cmw7XG4gICAgICAgICAgICBzZXJ2aWNlTG9jYXRpb24gPSBiYXNlVVJMLnNlcnZpY2VMb2NhdGlvbjtcblxuICAgICAgICAgICAgaWYgKGRlc3RpbmF0aW9uKSB7XG4gICAgICAgICAgICAgICAgdXJsID0gdXJsVXRpbHMucmVzb2x2ZShkZXN0aW5hdGlvbiwgdXJsKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuXG4gICAgICAgIGlmICh1cmxVdGlscy5pc1JlbGF0aXZlKHVybCkpIHtcbiAgICAgICAgICAgIHJldHVybiBmYWxzZTtcbiAgICAgICAgfVxuXG4gICAgICAgIHJlcXVlc3QudXJsID0gdXJsO1xuICAgICAgICByZXF1ZXN0LnNlcnZpY2VMb2NhdGlvbiA9IHNlcnZpY2VMb2NhdGlvbjtcblxuICAgICAgICByZXR1cm4gdHJ1ZTtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBnZW5lcmF0ZUluaXRSZXF1ZXN0KHJlcHJlc2VudGF0aW9uLCBtZWRpYVR5cGUpIHtcbiAgICAgICAgdmFyIHJlcXVlc3QgPSBuZXcgRnJhZ21lbnRSZXF1ZXN0KCk7XG4gICAgICAgIHZhciBwZXJpb2QsXG4gICAgICAgICAgICBwcmVzZW50YXRpb25TdGFydFRpbWU7XG5cbiAgICAgICAgcGVyaW9kID0gcmVwcmVzZW50YXRpb24uYWRhcHRhdGlvbi5wZXJpb2Q7XG5cbiAgICAgICAgcmVxdWVzdC5tZWRpYVR5cGUgPSBtZWRpYVR5cGU7XG4gICAgICAgIHJlcXVlc3QudHlwZSA9IEhUVFBSZXF1ZXN0LklOSVRfU0VHTUVOVF9UWVBFO1xuICAgICAgICByZXF1ZXN0LnJhbmdlID0gcmVwcmVzZW50YXRpb24ucmFuZ2U7XG4gICAgICAgIHByZXNlbnRhdGlvblN0YXJ0VGltZSA9IHBlcmlvZC5zdGFydDtcbiAgICAgICAgcmVxdWVzdC5hdmFpbGFiaWxpdHlTdGFydFRpbWUgPSB0aW1lbGluZUNvbnZlcnRlci5jYWxjQXZhaWxhYmlsaXR5U3RhcnRUaW1lRnJvbVByZXNlbnRhdGlvblRpbWUocHJlc2VudGF0aW9uU3RhcnRUaW1lLCByZXByZXNlbnRhdGlvbi5hZGFwdGF0aW9uLnBlcmlvZC5tcGQsIGlzRHluYW1pYyk7XG4gICAgICAgIHJlcXVlc3QuYXZhaWxhYmlsaXR5RW5kVGltZSA9IHRpbWVsaW5lQ29udmVydGVyLmNhbGNBdmFpbGFiaWxpdHlFbmRUaW1lRnJvbVByZXNlbnRhdGlvblRpbWUocHJlc2VudGF0aW9uU3RhcnRUaW1lICsgcGVyaW9kLmR1cmF0aW9uLCBwZXJpb2QubXBkLCBpc0R5bmFtaWMpO1xuICAgICAgICByZXF1ZXN0LnF1YWxpdHkgPSByZXByZXNlbnRhdGlvbi5pbmRleDtcbiAgICAgICAgcmVxdWVzdC5tZWRpYUluZm8gPSBzdHJlYW1Qcm9jZXNzb3IuZ2V0TWVkaWFJbmZvKCk7XG5cbiAgICAgICAgaWYgKHNldFJlcXVlc3RVcmwocmVxdWVzdCwgcmVwcmVzZW50YXRpb24uaW5pdGlhbGl6YXRpb24sIHJlcHJlc2VudGF0aW9uKSkge1xuICAgICAgICAgICAgcmV0dXJuIHJlcXVlc3Q7XG4gICAgICAgIH1cbiAgICB9XG5cbiAgICBmdW5jdGlvbiBnZXRJbml0UmVxdWVzdChyZXByZXNlbnRhdGlvbikge1xuICAgICAgICB2YXIgcmVxdWVzdDtcblxuICAgICAgICBpZiAoIXJlcHJlc2VudGF0aW9uKSByZXR1cm4gbnVsbDtcblxuICAgICAgICByZXF1ZXN0ID0gZ2VuZXJhdGVJbml0UmVxdWVzdChyZXByZXNlbnRhdGlvbiwgdHlwZSk7XG5cbiAgICAgICAgLy9sb2coXCJHb3QgYW4gaW5pdGlhbGl6YXRpb24uXCIpO1xuXG4gICAgICAgIHJldHVybiByZXF1ZXN0O1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIGlzTWVkaWFGaW5pc2hlZChyZXByZXNlbnRhdGlvbikge1xuICAgICAgICB2YXIgcGVyaW9kID0gcmVwcmVzZW50YXRpb24uYWRhcHRhdGlvbi5wZXJpb2Q7XG4gICAgICAgIHZhciBzZWdtZW50SW5mb1R5cGUgPSByZXByZXNlbnRhdGlvbi5zZWdtZW50SW5mb1R5cGU7XG5cbiAgICAgICAgdmFyIGlzRmluaXNoZWQgPSBmYWxzZTtcblxuICAgICAgICB2YXIgc0R1cmF0aW9uLFxuICAgICAgICAgICAgc2VnLFxuICAgICAgICAgICAgZlRpbWU7XG5cbiAgICAgICAgaWYgKGluZGV4IDwgMCkge1xuICAgICAgICAgICAgaXNGaW5pc2hlZCA9IGZhbHNlO1xuICAgICAgICB9IGVsc2UgaWYgKGlzRHluYW1pYyB8fCBpbmRleCA8IHJlcHJlc2VudGF0aW9uLmF2YWlsYWJsZVNlZ21lbnRzTnVtYmVyKSB7XG4gICAgICAgICAgICBzZWcgPSBnZXRTZWdtZW50QnlJbmRleChpbmRleCwgcmVwcmVzZW50YXRpb24pO1xuXG4gICAgICAgICAgICBpZiAoc2VnKSB7XG4gICAgICAgICAgICAgICAgZlRpbWUgPSBzZWcucHJlc2VudGF0aW9uU3RhcnRUaW1lIC0gcGVyaW9kLnN0YXJ0O1xuICAgICAgICAgICAgICAgIHNEdXJhdGlvbiA9IHJlcHJlc2VudGF0aW9uLmFkYXB0YXRpb24ucGVyaW9kLmR1cmF0aW9uO1xuICAgICAgICAgICAgICAgIGxvZyhyZXByZXNlbnRhdGlvbi5zZWdtZW50SW5mb1R5cGUgKyAnOiAnICsgZlRpbWUgKyAnIC8gJyArIHNEdXJhdGlvbik7XG4gICAgICAgICAgICAgICAgaXNGaW5pc2hlZCA9IHNlZ21lbnRJbmZvVHlwZSA9PT0gJ1NlZ21lbnRUaW1lbGluZScgJiYgaXNEeW5hbWljID8gZmFsc2UgOiAoZlRpbWUgPj0gc0R1cmF0aW9uKTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIGlzRmluaXNoZWQgPSB0cnVlO1xuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuIGlzRmluaXNoZWQ7XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gdXBkYXRlU2VnbWVudHMocmVwcmVzZW50YXRpb24pIHtcbiAgICAgICAgcmV0dXJuIHNlZ21lbnRzR2V0dGVyLmdldFNlZ21lbnRzKHJlcHJlc2VudGF0aW9uLCByZXF1ZXN0ZWRUaW1lLCBpbmRleCwgb25TZWdtZW50TGlzdFVwZGF0ZWQpO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIG9uU2VnbWVudExpc3RVcGRhdGVkKHJlcHJlc2VudGF0aW9uLCBzZWdtZW50cykge1xuXG4gICAgICAgIHJlcHJlc2VudGF0aW9uLnNlZ21lbnRzID0gc2VnbWVudHM7XG5cbiAgICAgICAgaWYgKHNlZ21lbnRzICYmIHNlZ21lbnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgICAgIGVhcmxpZXN0VGltZSA9IGlzTmFOKGVhcmxpZXN0VGltZSkgPyBzZWdtZW50c1swXS5wcmVzZW50YXRpb25TdGFydFRpbWUgOiBNYXRoLm1pbihzZWdtZW50c1swXS5wcmVzZW50YXRpb25TdGFydFRpbWUsICBlYXJsaWVzdFRpbWUpO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKGlzRHluYW1pYyAmJiBpc05hTih0aW1lbGluZUNvbnZlcnRlci5nZXRFeHBlY3RlZExpdmVFZGdlKCkpKSB7XG4gICAgICAgICAgICBsZXQgbGFzdElkeCA9IHNlZ21lbnRzLmxlbmd0aCAtIDE7XG4gICAgICAgICAgICBsZXQgbGFzdFNlZ21lbnQgPSBzZWdtZW50c1tsYXN0SWR4XTtcbiAgICAgICAgICAgIGxldCBsaXZlRWRnZSA9IGxhc3RTZWdtZW50LnByZXNlbnRhdGlvblN0YXJ0VGltZTtcbiAgICAgICAgICAgIGxldCBtZXRyaWNzID0gbWV0cmljc01vZGVsLmdldE1ldHJpY3NGb3IoJ3N0cmVhbScpO1xuICAgICAgICAgICAgLy8gdGhlIGxhc3Qgc2VnbWVudCBpcyBzdXBwb3NlZCB0byBiZSBhIGxpdmUgZWRnZVxuICAgICAgICAgICAgdGltZWxpbmVDb252ZXJ0ZXIuc2V0RXhwZWN0ZWRMaXZlRWRnZShsaXZlRWRnZSk7XG4gICAgICAgICAgICBtZXRyaWNzTW9kZWwudXBkYXRlTWFuaWZlc3RVcGRhdGVJbmZvKGRhc2hNZXRyaWNzLmdldEN1cnJlbnRNYW5pZmVzdFVwZGF0ZShtZXRyaWNzKSwge3ByZXNlbnRhdGlvblN0YXJ0VGltZTogbGl2ZUVkZ2V9KTtcbiAgICAgICAgfVxuICAgIH1cblxuICAgIGZ1bmN0aW9uIHVwZGF0ZVNlZ21lbnRMaXN0KHJlcHJlc2VudGF0aW9uKSB7XG5cbiAgICAgICAgaWYgKCFyZXByZXNlbnRhdGlvbikge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdubyByZXByZXNlbnRhdGlvbicpO1xuICAgICAgICB9XG5cbiAgICAgICAgcmVwcmVzZW50YXRpb24uc2VnbWVudHMgPSBudWxsO1xuXG4gICAgICAgIHVwZGF0ZVNlZ21lbnRzKHJlcHJlc2VudGF0aW9uKTtcblxuICAgICAgICByZXR1cm4gcmVwcmVzZW50YXRpb247XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gdXBkYXRlUmVwcmVzZW50YXRpb24ocmVwcmVzZW50YXRpb24sIGtlZXBJZHgpIHtcbiAgICAgICAgdmFyIGhhc0luaXRpYWxpemF0aW9uID0gcmVwcmVzZW50YXRpb24uaW5pdGlhbGl6YXRpb247XG4gICAgICAgIHZhciBoYXNTZWdtZW50cyA9IHJlcHJlc2VudGF0aW9uLnNlZ21lbnRJbmZvVHlwZSAhPT0gJ0Jhc2VVUkwnICYmIHJlcHJlc2VudGF0aW9uLnNlZ21lbnRJbmZvVHlwZSAhPT0gJ1NlZ21lbnRCYXNlJyAmJiAhcmVwcmVzZW50YXRpb24uaW5kZXhSYW5nZTtcbiAgICAgICAgdmFyIGVycm9yO1xuXG4gICAgICAgIGlmICghcmVwcmVzZW50YXRpb24uc2VnbWVudER1cmF0aW9uICYmICFyZXByZXNlbnRhdGlvbi5zZWdtZW50cykge1xuICAgICAgICAgICAgdXBkYXRlU2VnbWVudExpc3QocmVwcmVzZW50YXRpb24pO1xuICAgICAgICB9XG5cbiAgICAgICAgcmVwcmVzZW50YXRpb24uc2VnbWVudEF2YWlsYWJpbGl0eVJhbmdlID0gbnVsbDtcbiAgICAgICAgcmVwcmVzZW50YXRpb24uc2VnbWVudEF2YWlsYWJpbGl0eVJhbmdlID0gdGltZWxpbmVDb252ZXJ0ZXIuY2FsY1NlZ21lbnRBdmFpbGFiaWxpdHlSYW5nZShyZXByZXNlbnRhdGlvbiwgaXNEeW5hbWljKTtcblxuICAgICAgICBpZiAoKHJlcHJlc2VudGF0aW9uLnNlZ21lbnRBdmFpbGFiaWxpdHlSYW5nZS5lbmQgPCByZXByZXNlbnRhdGlvbi5zZWdtZW50QXZhaWxhYmlsaXR5UmFuZ2Uuc3RhcnQpICYmICFyZXByZXNlbnRhdGlvbi51c2VDYWxjdWxhdGVkTGl2ZUVkZ2VUaW1lKSB7XG4gICAgICAgICAgICBlcnJvciA9IG5ldyBFcnJvcihTRUdNRU5UU19VTkFWQUlMQUJMRV9FUlJPUl9DT0RFLCAnbm8gc2VnbWVudHMgYXJlIGF2YWlsYWJsZSB5ZXQnLCB7YXZhaWxhYmlsaXR5RGVsYXk6IHJlcHJlc2VudGF0aW9uLnNlZ21lbnRBdmFpbGFiaWxpdHlSYW5nZS5zdGFydCAtIHJlcHJlc2VudGF0aW9uLnNlZ21lbnRBdmFpbGFiaWxpdHlSYW5nZS5lbmR9KTtcbiAgICAgICAgICAgIGV2ZW50QnVzLnRyaWdnZXIoRXZlbnRzLlJFUFJFU0VOVEFUSU9OX1VQREFURUQsIHtzZW5kZXI6IHRoaXMsIHJlcHJlc2VudGF0aW9uOiByZXByZXNlbnRhdGlvbiwgZXJyb3I6IGVycm9yfSk7XG4gICAgICAgICAgICByZXR1cm47XG4gICAgICAgIH1cblxuICAgICAgICBpZiAoIWtlZXBJZHgpIGluZGV4ID0gLTE7XG5cbiAgICAgICAgaWYgKHJlcHJlc2VudGF0aW9uLnNlZ21lbnREdXJhdGlvbikge1xuICAgICAgICAgICAgdXBkYXRlU2VnbWVudExpc3QocmVwcmVzZW50YXRpb24pO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKCFoYXNJbml0aWFsaXphdGlvbikge1xuICAgICAgICAgICAgc2VnbWVudEJhc2VMb2FkZXIubG9hZEluaXRpYWxpemF0aW9uKHJlcHJlc2VudGF0aW9uKTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmICghaGFzU2VnbWVudHMpIHtcbiAgICAgICAgICAgIHNlZ21lbnRCYXNlTG9hZGVyLmxvYWRTZWdtZW50cyhyZXByZXNlbnRhdGlvbiwgdHlwZSwgcmVwcmVzZW50YXRpb24uaW5kZXhSYW5nZSk7XG4gICAgICAgIH1cblxuICAgICAgICBpZiAoaGFzSW5pdGlhbGl6YXRpb24gJiYgaGFzU2VnbWVudHMpIHtcbiAgICAgICAgICAgIGV2ZW50QnVzLnRyaWdnZXIoRXZlbnRzLlJFUFJFU0VOVEFUSU9OX1VQREFURUQsIHtzZW5kZXI6IHRoaXMsIHJlcHJlc2VudGF0aW9uOiByZXByZXNlbnRhdGlvbn0pO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gZ2V0SW5kZXhGb3JTZWdtZW50cyh0aW1lLCByZXByZXNlbnRhdGlvbiwgdGltZVRocmVzaG9sZCkge1xuICAgICAgICB2YXIgc2VnbWVudHMgPSByZXByZXNlbnRhdGlvbi5zZWdtZW50cztcbiAgICAgICAgdmFyIGxuID0gc2VnbWVudHMgPyBzZWdtZW50cy5sZW5ndGggOiBudWxsO1xuXG4gICAgICAgIHZhciBpZHggPSAtMTtcbiAgICAgICAgdmFyIGVwc2lsb24sXG4gICAgICAgICAgICBmcmFnLFxuICAgICAgICAgICAgZnQsXG4gICAgICAgICAgICBmZCxcbiAgICAgICAgICAgIGk7XG5cbiAgICAgICAgaWYgKHNlZ21lbnRzICYmIGxuID4gMCkge1xuICAgICAgICAgICAgZm9yIChpID0gMDsgaSA8IGxuOyBpKyspIHtcbiAgICAgICAgICAgICAgICBmcmFnID0gc2VnbWVudHNbaV07XG4gICAgICAgICAgICAgICAgZnQgPSBmcmFnLnByZXNlbnRhdGlvblN0YXJ0VGltZTtcbiAgICAgICAgICAgICAgICBmZCA9IGZyYWcuZHVyYXRpb247XG4gICAgICAgICAgICAgICAgZXBzaWxvbiA9ICh0aW1lVGhyZXNob2xkID09PSB1bmRlZmluZWQgfHwgdGltZVRocmVzaG9sZCA9PT0gbnVsbCkgPyBmZCAvIDIgOiB0aW1lVGhyZXNob2xkO1xuICAgICAgICAgICAgICAgIGlmICgodGltZSArIGVwc2lsb24pID49IGZ0ICYmXG4gICAgICAgICAgICAgICAgICAgICh0aW1lIC0gZXBzaWxvbikgPCAoZnQgKyBmZCkpIHtcbiAgICAgICAgICAgICAgICAgICAgaWR4ID0gZnJhZy5hdmFpbGFiaWxpdHlJZHg7XG4gICAgICAgICAgICAgICAgICAgIGJyZWFrO1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgIH1cbiAgICAgICAgfVxuXG4gICAgICAgIHJldHVybiBpZHg7XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gZ2V0UmVxdWVzdEZvclNlZ21lbnQoc2VnbWVudCkge1xuICAgICAgICBpZiAoc2VnbWVudCA9PT0gbnVsbCB8fCBzZWdtZW50ID09PSB1bmRlZmluZWQpIHtcbiAgICAgICAgICAgIHJldHVybiBudWxsO1xuICAgICAgICB9XG5cbiAgICAgICAgdmFyIHJlcXVlc3QgPSBuZXcgRnJhZ21lbnRSZXF1ZXN0KCk7XG4gICAgICAgIHZhciByZXByZXNlbnRhdGlvbiA9IHNlZ21lbnQucmVwcmVzZW50YXRpb247XG4gICAgICAgIHZhciBiYW5kd2lkdGggPSByZXByZXNlbnRhdGlvbi5hZGFwdGF0aW9uLnBlcmlvZC5tcGQubWFuaWZlc3QuUGVyaW9kX2FzQXJyYXlbcmVwcmVzZW50YXRpb24uYWRhcHRhdGlvbi5wZXJpb2QuaW5kZXhdLlxuICAgICAgICAgICAgQWRhcHRhdGlvblNldF9hc0FycmF5W3JlcHJlc2VudGF0aW9uLmFkYXB0YXRpb24uaW5kZXhdLlJlcHJlc2VudGF0aW9uX2FzQXJyYXlbcmVwcmVzZW50YXRpb24uaW5kZXhdLmJhbmR3aWR0aDtcbiAgICAgICAgdmFyIHVybCA9IHNlZ21lbnQubWVkaWE7XG5cbiAgICAgICAgdXJsID0gcmVwbGFjZVRva2VuRm9yVGVtcGxhdGUodXJsLCAnTnVtYmVyJywgc2VnbWVudC5yZXBsYWNlbWVudE51bWJlcik7XG4gICAgICAgIHVybCA9IHJlcGxhY2VUb2tlbkZvclRlbXBsYXRlKHVybCwgJ1RpbWUnLCBzZWdtZW50LnJlcGxhY2VtZW50VGltZSk7XG4gICAgICAgIHVybCA9IHJlcGxhY2VUb2tlbkZvclRlbXBsYXRlKHVybCwgJ0JhbmR3aWR0aCcsIGJhbmR3aWR0aCk7XG4gICAgICAgIHVybCA9IHJlcGxhY2VJREZvclRlbXBsYXRlKHVybCwgcmVwcmVzZW50YXRpb24uaWQpO1xuICAgICAgICB1cmwgPSB1bmVzY2FwZURvbGxhcnNJblRlbXBsYXRlKHVybCk7XG5cbiAgICAgICAgcmVxdWVzdC5tZWRpYVR5cGUgPSB0eXBlO1xuICAgICAgICByZXF1ZXN0LnR5cGUgPSBIVFRQUmVxdWVzdC5NRURJQV9TRUdNRU5UX1RZUEU7XG4gICAgICAgIHJlcXVlc3QucmFuZ2UgPSBzZWdtZW50Lm1lZGlhUmFuZ2U7XG4gICAgICAgIHJlcXVlc3Quc3RhcnRUaW1lID0gc2VnbWVudC5wcmVzZW50YXRpb25TdGFydFRpbWU7XG4gICAgICAgIHJlcXVlc3QuZHVyYXRpb24gPSBzZWdtZW50LmR1cmF0aW9uO1xuICAgICAgICByZXF1ZXN0LnRpbWVzY2FsZSA9IHJlcHJlc2VudGF0aW9uLnRpbWVzY2FsZTtcbiAgICAgICAgcmVxdWVzdC5hdmFpbGFiaWxpdHlTdGFydFRpbWUgPSBzZWdtZW50LmF2YWlsYWJpbGl0eVN0YXJ0VGltZTtcbiAgICAgICAgcmVxdWVzdC5hdmFpbGFiaWxpdHlFbmRUaW1lID0gc2VnbWVudC5hdmFpbGFiaWxpdHlFbmRUaW1lO1xuICAgICAgICByZXF1ZXN0LndhbGxTdGFydFRpbWUgPSBzZWdtZW50LndhbGxTdGFydFRpbWU7XG4gICAgICAgIHJlcXVlc3QucXVhbGl0eSA9IHJlcHJlc2VudGF0aW9uLmluZGV4O1xuICAgICAgICByZXF1ZXN0LmluZGV4ID0gc2VnbWVudC5hdmFpbGFiaWxpdHlJZHg7XG4gICAgICAgIHJlcXVlc3QubWVkaWFJbmZvID0gc3RyZWFtUHJvY2Vzc29yLmdldE1lZGlhSW5mbygpO1xuICAgICAgICByZXF1ZXN0LmFkYXB0YXRpb25JbmRleCA9IHJlcHJlc2VudGF0aW9uLmFkYXB0YXRpb24uaW5kZXg7XG5cbiAgICAgICAgaWYgKHNldFJlcXVlc3RVcmwocmVxdWVzdCwgdXJsLCByZXByZXNlbnRhdGlvbikpIHtcbiAgICAgICAgICAgIHJldHVybiByZXF1ZXN0O1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gZ2V0U2VnbWVudFJlcXVlc3RGb3JUaW1lKHJlcHJlc2VudGF0aW9uLCB0aW1lLCBvcHRpb25zKSB7XG4gICAgICAgIHZhciByZXF1ZXN0LFxuICAgICAgICAgICAgc2VnbWVudCxcbiAgICAgICAgICAgIGZpbmlzaGVkO1xuXG4gICAgICAgIHZhciBpZHggPSBpbmRleDtcblxuICAgICAgICB2YXIga2VlcElkeCA9IG9wdGlvbnMgPyBvcHRpb25zLmtlZXBJZHggOiBmYWxzZTtcbiAgICAgICAgdmFyIHRpbWVUaHJlc2hvbGQgPSBvcHRpb25zID8gb3B0aW9ucy50aW1lVGhyZXNob2xkIDogbnVsbDtcbiAgICAgICAgdmFyIGlnbm9yZUlzRmluaXNoZWQgPSAob3B0aW9ucyAmJiBvcHRpb25zLmlnbm9yZUlzRmluaXNoZWQpID8gdHJ1ZSA6IGZhbHNlO1xuXG4gICAgICAgIGlmICghcmVwcmVzZW50YXRpb24pIHtcbiAgICAgICAgICAgIHJldHVybiBudWxsO1xuICAgICAgICB9XG5cbiAgICAgICAgaWYgKHJlcXVlc3RlZFRpbWUgIT09IHRpbWUpIHsgLy8gV2hlbiBwbGF5aW5nIGF0IGxpdmUgZWRnZSB3aXRoIDAgZGVsYXkgd2UgbWF5IGxvb3AgYmFjayB3aXRoIHNhbWUgdGltZSBhbmQgaW5kZXggdW50aWwgaXQgaXMgYXZhaWxhYmxlLiBSZWR1Y2VzIHZlcmJvc2VuZXNzIG9mIGxvZ3MuXG4gICAgICAgICAgICByZXF1ZXN0ZWRUaW1lID0gdGltZTtcbiAgICAgICAgICAgIGxvZygnR2V0dGluZyB0aGUgcmVxdWVzdCBmb3IgJyArIHR5cGUgKyAnIHRpbWUgOiAnICsgdGltZSk7XG4gICAgICAgIH1cblxuICAgICAgICBpbmRleCA9IGdldEluZGV4Rm9yU2VnbWVudHModGltZSwgcmVwcmVzZW50YXRpb24sIHRpbWVUaHJlc2hvbGQpO1xuICAgICAgICAvL0luZGV4IG1heSBiZSAtMSBpZiBnZXRTZWdtZW50cyBuZWVkcyB0byB1cGRhdGUuICBTbyBhZnRlciBnZXRTZWdtZW50cyBpcyBjYWxsZWQgYW5kIHVwZGF0ZWQgdGhlbiB0cnkgdG8gZ2V0IGluZGV4IGFnYWluLlxuICAgICAgICB1cGRhdGVTZWdtZW50cyhyZXByZXNlbnRhdGlvbik7XG4gICAgICAgIGlmIChpbmRleCA8IDApIHtcbiAgICAgICAgICAgIGluZGV4ID0gZ2V0SW5kZXhGb3JTZWdtZW50cyh0aW1lLCByZXByZXNlbnRhdGlvbiwgdGltZVRocmVzaG9sZCk7XG4gICAgICAgIH1cblxuICAgICAgICBpZiAoaW5kZXggPiAwKSB7XG4gICAgICAgICAgICBsb2coJ0luZGV4IGZvciAnICsgdHlwZSArICcgdGltZSAnICsgdGltZSArICcgaXMgJyArIGluZGV4ICk7XG4gICAgICAgIH1cblxuICAgICAgICBmaW5pc2hlZCA9ICFpZ25vcmVJc0ZpbmlzaGVkID8gaXNNZWRpYUZpbmlzaGVkKHJlcHJlc2VudGF0aW9uKSA6IGZhbHNlO1xuICAgICAgICBpZiAoZmluaXNoZWQpIHtcbiAgICAgICAgICAgIHJlcXVlc3QgPSBuZXcgRnJhZ21lbnRSZXF1ZXN0KCk7XG4gICAgICAgICAgICByZXF1ZXN0LmFjdGlvbiA9IEZyYWdtZW50UmVxdWVzdC5BQ1RJT05fQ09NUExFVEU7XG4gICAgICAgICAgICByZXF1ZXN0LmluZGV4ID0gaW5kZXg7XG4gICAgICAgICAgICByZXF1ZXN0Lm1lZGlhVHlwZSA9IHR5cGU7XG4gICAgICAgICAgICByZXF1ZXN0Lm1lZGlhSW5mbyA9IHN0cmVhbVByb2Nlc3Nvci5nZXRNZWRpYUluZm8oKTtcbiAgICAgICAgICAgIGxvZygnU2lnbmFsIGNvbXBsZXRlLicsIHJlcXVlc3QpO1xuXG4gICAgICAgIH0gZWxzZSB7XG4gICAgICAgICAgICBzZWdtZW50ID0gZ2V0U2VnbWVudEJ5SW5kZXgoaW5kZXgsIHJlcHJlc2VudGF0aW9uKTtcbiAgICAgICAgICAgIHJlcXVlc3QgPSBnZXRSZXF1ZXN0Rm9yU2VnbWVudChzZWdtZW50KTtcbiAgICAgICAgfVxuXG4gICAgICAgIGlmIChrZWVwSWR4ICYmIGlkeCA+PSAwKSB7XG4gICAgICAgICAgICBpbmRleCA9IHJlcHJlc2VudGF0aW9uLnNlZ21lbnRJbmZvVHlwZSA9PT0gJ1NlZ21lbnRUaW1lbGluZScgJiYgaXNEeW5hbWljID8gaW5kZXggOiBpZHg7XG4gICAgICAgIH1cblxuICAgICAgICByZXR1cm4gcmVxdWVzdDtcbiAgICB9XG5cbiAgICBmdW5jdGlvbiBnZW5lcmF0ZVNlZ21lbnRSZXF1ZXN0Rm9yVGltZShyZXByZXNlbnRhdGlvbiwgdGltZSkge1xuICAgICAgICB2YXIgc3RlcCA9IChyZXByZXNlbnRhdGlvbi5zZWdtZW50QXZhaWxhYmlsaXR5UmFuZ2UuZW5kIC0gcmVwcmVzZW50YXRpb24uc2VnbWVudEF2YWlsYWJpbGl0eVJhbmdlLnN0YXJ0KSAvIDI7XG5cbiAgICAgICAgcmVwcmVzZW50YXRpb24uc2VnbWVudHMgPSBudWxsO1xuICAgICAgICByZXByZXNlbnRhdGlvbi5zZWdtZW50QXZhaWxhYmlsaXR5UmFuZ2UgPSB7c3RhcnQ6IHRpbWUgLSBzdGVwLCBlbmQ6IHRpbWUgKyBzdGVwfTtcbiAgICAgICAgcmV0dXJuIGdldFNlZ21lbnRSZXF1ZXN0Rm9yVGltZShyZXByZXNlbnRhdGlvbiwgdGltZSwge2tlZXBJZHg6IGZhbHNlLCBpZ25vcmVJc0ZpbmlzaGVkOiB0cnVlfSk7XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gZ2V0TmV4dFNlZ21lbnRSZXF1ZXN0KHJlcHJlc2VudGF0aW9uKSB7XG4gICAgICAgIHZhciByZXF1ZXN0LFxuICAgICAgICAgICAgc2VnbWVudCxcbiAgICAgICAgICAgIGZpbmlzaGVkO1xuXG4gICAgICAgIGlmICghcmVwcmVzZW50YXRpb24gfHwgaW5kZXggPT09IC0xKSB7XG4gICAgICAgICAgICByZXR1cm4gbnVsbDtcbiAgICAgICAgfVxuXG4gICAgICAgIHJlcXVlc3RlZFRpbWUgPSBudWxsO1xuICAgICAgICBpbmRleCsrO1xuXG4gICAgICAgIGxvZygnR2V0dGluZyB0aGUgbmV4dCByZXF1ZXN0IGF0IGluZGV4OiAnICsgaW5kZXgpO1xuXG4gICAgICAgIGZpbmlzaGVkID0gaXNNZWRpYUZpbmlzaGVkKHJlcHJlc2VudGF0aW9uKTtcbiAgICAgICAgaWYgKGZpbmlzaGVkKSB7XG4gICAgICAgICAgICByZXF1ZXN0ID0gbmV3IEZyYWdtZW50UmVxdWVzdCgpO1xuICAgICAgICAgICAgcmVxdWVzdC5hY3Rpb24gPSBGcmFnbWVudFJlcXVlc3QuQUNUSU9OX0NPTVBMRVRFO1xuICAgICAgICAgICAgcmVxdWVzdC5pbmRleCA9IGluZGV4O1xuICAgICAgICAgICAgcmVxdWVzdC5tZWRpYVR5cGUgPSB0eXBlO1xuICAgICAgICAgICAgcmVxdWVzdC5tZWRpYUluZm8gPSBzdHJlYW1Qcm9jZXNzb3IuZ2V0TWVkaWFJbmZvKCk7XG4gICAgICAgICAgICBsb2coJ1NpZ25hbCBjb21wbGV0ZS4nKTtcbiAgICAgICAgfSBlbHNlIHtcbiAgICAgICAgICAgIHVwZGF0ZVNlZ21lbnRzKHJlcHJlc2VudGF0aW9uKTtcbiAgICAgICAgICAgIHNlZ21lbnQgPSBnZXRTZWdtZW50QnlJbmRleChpbmRleCwgcmVwcmVzZW50YXRpb24pO1xuICAgICAgICAgICAgcmVxdWVzdCA9IGdldFJlcXVlc3RGb3JTZWdtZW50KHNlZ21lbnQpO1xuICAgICAgICAgICAgaWYgKCFzZWdtZW50ICYmIGlzRHluYW1pYykge1xuICAgICAgICAgICAgICAgIC8qXG4gICAgICAgICAgICAgICAgIFNvbWV0aW1lcyB3aGVuIHBsYXlpbmcgZHluYW1pYyBzdHJlYW1zIHdpdGggMCBmcmFnbWVudCBkZWxheSBhdCBsaXZlIGVkZ2Ugd2UgYXNrIGZvclxuICAgICAgICAgICAgICAgICBhbiBpbmRleCBiZWZvcmUgaXQgaXMgYXZhaWxhYmxlIHNvIHdlIGRlY3JlbWVudCBpbmRleCBiYWNrIGFuZCBzZW5kIG51bGwgcmVxdWVzdFxuICAgICAgICAgICAgICAgICB3aGljaCB0cmlnZ2VycyB0aGUgdmFsaWRhdGUgbG9vcCB0byByZXJ1biBhbmQgdGhlIG5leHQgdGltZSB0aGUgc2VnbWVudCBzaG91bGQgYmVcbiAgICAgICAgICAgICAgICAgYXZhaWxhYmxlLlxuICAgICAgICAgICAgICAgICAqL1xuICAgICAgICAgICAgICAgIGluZGV4LS0gO1xuICAgICAgICAgICAgfVxuICAgICAgICB9XG5cbiAgICAgICAgcmV0dXJuIHJlcXVlc3Q7XG4gICAgfVxuXG4gICAgZnVuY3Rpb24gb25Jbml0aWFsaXphdGlvbkxvYWRlZChlKSB7XG4gICAgICAgIHZhciByZXByZXNlbnRhdGlvbiA9IGUucmVwcmVzZW50YXRpb247XG4gICAgICAgIC8vbG9nKFwiR290IGFuIGluaXRpYWxpemF0aW9uLlwiKTtcbiAgICAgICAgaWYgKCFyZXByZXNlbnRhdGlvbi5zZWdtZW50cykgcmV0dXJuO1xuXG4gICAgICAgIGV2ZW50QnVzLnRyaWdnZXIoRXZlbnRzLlJFUFJFU0VOVEFUSU9OX1VQREFURUQsIHtzZW5kZXI6IHRoaXMsIHJlcHJlc2VudGF0aW9uOiByZXByZXNlbnRhdGlvbn0pO1xuICAgIH1cblxuICAgIGZ1bmN0aW9uIG9uU2VnbWVudHNMb2FkZWQoZSkge1xuICAgICAgICBpZiAoZS5lcnJvciB8fCAodHlwZSAhPT0gZS5tZWRpYVR5cGUpKSByZXR1cm47XG5cbiAgICAgICAgdmFyIGZyYWdtZW50cyA9IGUuc2VnbWVudHM7XG4gICAgICAgIHZhciByZXByZXNlbnRhdGlvbiA9IGUucmVwcmVzZW50YXRpb247XG4gICAgICAgIHZhciBzZWdtZW50cyA9IFtdO1xuICAgICAgICB2YXIgY291bnQgPSAwO1xuXG4gICAgICAgIHZhciBpLFxuICAgICAgICAgICAgbGVuLFxuICAgICAgICAgICAgcyxcbiAgICAgICAgICAgIHNlZztcblxuICAgICAgICBmb3IgKGkgPSAwLCBsZW4gPSBmcmFnbWVudHMubGVuZ3RoOyBpIDwgbGVuOyBpKyspIHtcbiAgICAgICAgICAgIHMgPSBmcmFnbWVudHNbaV07XG5cbiAgICAgICAgICAgIHNlZyA9IGdldFRpbWVCYXNlZFNlZ21lbnQoXG4gICAgICAgICAgICAgICAgdGltZWxpbmVDb252ZXJ0ZXIsXG4gICAgICAgICAgICAgICAgaXNEeW5hbWljLFxuICAgICAgICAgICAgICAgIHJlcHJlc2VudGF0aW9uLFxuICAgICAgICAgICAgICAgIHMuc3RhcnRUaW1lLFxuICAgICAgICAgICAgICAgIHMuZHVyYXRpb24sXG4gICAgICAgICAgICAgICAgcy50aW1lc2NhbGUsXG4gICAgICAgICAgICAgICAgcy5tZWRpYSxcbiAgICAgICAgICAgICAgICBzLm1lZGlhUmFuZ2UsXG4gICAgICAgICAgICAgICAgY291bnQpO1xuXG4gICAgICAgICAgICBzZWdtZW50cy5wdXNoKHNlZyk7XG4gICAgICAgICAgICBzZWcgPSBudWxsO1xuICAgICAgICAgICAgY291bnQrKztcbiAgICAgICAgfVxuXG4gICAgICAgIHJlcHJlc2VudGF0aW9uLnNlZ21lbnRBdmFpbGFiaWxpdHlSYW5nZSA9IHtzdGFydDogc2VnbWVudHNbMF0ucHJlc2VudGF0aW9uU3RhcnRUaW1lLCBlbmQ6IHNlZ21lbnRzW2xlbiAtIDFdLnByZXNlbnRhdGlvblN0YXJ0VGltZX07XG4gICAgICAgIHJlcHJlc2VudGF0aW9uLmF2YWlsYWJsZVNlZ21lbnRzTnVtYmVyID0gbGVuO1xuXG4gICAgICAgIG9uU2VnbWVudExpc3RVcGRhdGVkKHJlcHJlc2VudGF0aW9uLCBzZWdtZW50cyk7XG5cbiAgICAgICAgaWYgKCFyZXByZXNlbnRhdGlvbi5pbml0aWFsaXphdGlvbikgcmV0dXJuO1xuXG4gICAgICAgIGV2ZW50QnVzLnRyaWdnZXIoRXZlbnRzLlJFUFJFU0VOVEFUSU9OX1VQREFURUQsIHtzZW5kZXI6IHRoaXMsIHJlcHJlc2VudGF0aW9uOiByZXByZXNlbnRhdGlvbn0pO1xuICAgIH1cblxuICAgIGluc3RhbmNlID0ge1xuICAgICAgICBpbml0aWFsaXplOiBpbml0aWFsaXplLFxuICAgICAgICBnZXRTdHJlYW1Qcm9jZXNzb3I6IGdldFN0cmVhbVByb2Nlc3NvcixcbiAgICAgICAgZ2V0SW5pdFJlcXVlc3Q6IGdldEluaXRSZXF1ZXN0LFxuICAgICAgICBnZXRTZWdtZW50UmVxdWVzdEZvclRpbWU6IGdldFNlZ21lbnRSZXF1ZXN0Rm9yVGltZSxcbiAgICAgICAgZ2V0TmV4dFNlZ21lbnRSZXF1ZXN0OiBnZXROZXh0U2VnbWVudFJlcXVlc3QsXG4gICAgICAgIGdlbmVyYXRlU2VnbWVudFJlcXVlc3RGb3JUaW1lOiBnZW5lcmF0ZVNlZ21lbnRSZXF1ZXN0Rm9yVGltZSxcbiAgICAgICAgdXBkYXRlUmVwcmVzZW50YXRpb246IHVwZGF0ZVJlcHJlc2VudGF0aW9uLFxuICAgICAgICBzZXRDdXJyZW50VGltZTogc2V0Q3VycmVudFRpbWUsXG4gICAgICAgIGdldEN1cnJlbnRUaW1lOiBnZXRDdXJyZW50VGltZSxcbiAgICAgICAgZ2V0Q3VycmVudEluZGV4OiBnZXRDdXJyZW50SW5kZXgsXG4gICAgICAgIGdldEVhcmxpZXN0VGltZTogZ2V0RWFybGllc3RUaW1lLFxuICAgICAgICByZXNldDogcmVzZXRcbiAgICB9O1xuXG4gICAgc2V0dXAoKTtcblxuICAgIHJldHVybiBpbnN0YW5jZTtcbn1cblxuRGFzaEhhbmRsZXIuX19kYXNoanNfZmFjdG9yeV9uYW1lID0gJ0Rhc2hIYW5kbGVyJztcbmxldCBmYWN0b3J5ID0gRmFjdG9yeU1ha2VyLmdldENsYXNzRmFjdG9yeShEYXNoSGFuZGxlcik7XG5mYWN0b3J5LlNFR01FTlRTX1VOQVZBSUxBQkxFX0VSUk9SX0NPREUgPSBTRUdNRU5UU19VTkFWQUlMQUJMRV9FUlJPUl9DT0RFO1xuZXhwb3J0IGRlZmF1bHQgZmFjdG9yeTtcbiJdfQ==</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jan 15 2017 21:03:55 GMT+0800 (中国标准时间)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>
